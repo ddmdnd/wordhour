@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f5f2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Word Hour">
+  <meta name="description" content="Твоё слово каждый час. Персональный словарь английских слов.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Word Hour — слово каждый час</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Word Hour">
+        <span class="brand-mark">W</span>
+        <span>word<span class="brand-light">hour</span></span>
+      </a>
+      <div class="top-actions">
+        <span class="status-dot"></span><span class="top-caption">ТВОЙ СЛОВАРЬ</span>
+      </div>
+    </header>
+
+    <main>
+      <section id="view-word" class="view active">
+        <div class="eyebrow-row">
+          <span class="eyebrow">СЛОВО ЧАСА</span>
+          <span id="hour-badge" class="hour-badge">ОБНОВЛЕНИЕ КАЖДЫЙ ЧАС</span>
+        </div>
+        <article class="word-card">
+          <div class="card-topline">
+            <span id="word-level" class="level-pill">B1 · VERB</span>
+            <button id="favorite-btn" class="icon-button" aria-label="Добавить в сложные">♡</button>
+          </div>
+          <div class="word-content">
+            <div id="word-english" class="word-english">Accomplish</div>
+            <div id="word-phonetic" class="word-phonetic">/əˈkʌm.plɪʃ/</div>
+            <div id="word-translation" class="word-translation">достигать, выполнять</div>
+          </div>
+          <div class="example-block">
+            <div class="example-label">ПРИМЕР</div>
+            <p id="word-example" class="example-text">I want to accomplish all my goals this year.</p>
+            <p id="word-example-translation" class="example-translation">Я хочу достичь всех своих целей в этом году.</p>
+          </div>
+          <div class="card-footer">
+            <div>
+              <div class="timer-label">СЛЕДУЮЩЕЕ СЛОВО ЧЕРЕЗ</div>
+              <div id="countdown" class="countdown">00:42:18</div>
+            </div>
+            <span class="hour-symbol">↗</span>
+          </div>
+        </article>
+
+        <div class="word-actions">
+          <button id="learned-btn" class="primary-button">✓  Я это знаю</button>
+          <button id="next-btn" class="secondary-button">Следующее слово <span>→</span></button>
+        </div>
+        <div class="word-meta">
+          <span id="word-index">ДЕМО-СЛОВАРЬ</span>
+          <span id="word-status">Смена по местному времени</span>
+        </div>
+        <div id="empty-state" class="empty-state hidden">
+          <div class="empty-icon">Aa</div>
+          <h2>Начни со своего словаря</h2>
+          <p>Загрузи список слов — и Word Hour будет показывать новое слово каждый час.</p>
+          <button class="primary-button" data-go="dictionary">Загрузить слова</button>
+        </div>
+      </section>
+
+      <section id="view-dictionary" class="view">
+        <div class="section-heading">
+          <div><div class="eyebrow">ТВОЯ КОЛЛЕКЦИЯ</div><h1>Словарь</h1></div>
+          <span id="dictionary-count" class="count-chip">0 слов</span>
+        </div>
+        <div class="toolbar">
+          <label class="searchbox"><span>⌕</span><input id="search-input" type="search" placeholder="Найти слово или перевод…"></label>
+          <select id="filter-select" aria-label="Фильтр">
+            <option value="all">Все слова</option><option value="new">Новые</option><option value="learned">Выученные</option><option value="difficult">Сложные</option>
+          </select>
+        </div>
+        <div id="dictionary-list" class="dictionary-list"></div>
+        <div class="dictionary-footer">
+          <button id="import-open-btn" class="secondary-button">＋ Импортировать слова</button>
+          <button id="export-btn" class="text-button">Экспорт ↓</button>
+        </div>
+      </section>
+
+      <section id="view-progress" class="view">
+        <div class="section-heading"><div><div class="eyebrow">ТВОЙ РЕЗУЛЬТАТ</div><h1>Прогресс</h1></div></div>
+        <div class="stats-grid">
+          <div class="stat-card"><span class="stat-label">В СЛОВАРЕ</span><strong id="stat-total">0</strong><span class="stat-sub">слов</span></div>
+          <div class="stat-card"><span class="stat-label">ВЫУЧЕНО</span><strong id="stat-learned">0</strong><span class="stat-sub">слов</span></div>
+          <div class="stat-card"><span class="stat-label">СЛОЖНЫЕ</span><strong id="stat-difficult">0</strong><span class="stat-sub">на повторение</span></div>
+          <div class="stat-card"><span class="stat-label">ПРОСМОТРЕНО</span><strong id="stat-viewed">0</strong><span class="stat-sub">уникальных слов</span></div>
+        </div>
+        <div class="progress-card">
+          <div class="progress-title"><span>Общий прогресс</span><strong id="progress-percent">0%</strong></div>
+          <div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div>
+          <p>Отмечай слова как выученные — так ты будешь видеть свой результат.</p>
+        </div>
+        <div class="history-card">
+          <div class="history-title">Последние слова</div>
+          <div id="history-list" class="history-list"><p class="muted">История появится после просмотра слов.</p></div>
+        </div>
+      </section>
+
+      <section id="view-widget" class="view">
+        <div class="section-heading"><div><div class="eyebrow">НА ГЛАВНОМ ЭКРАНЕ</div><h1>Виджет iPhone</h1></div></div>
+        <div class="widget-preview">
+          <div class="widget-label">WORD OF THE HOUR</div>
+          <div id="widget-word" class="widget-word">Accomplish</div>
+          <div id="widget-translation" class="widget-translation">достигать, выполнять</div>
+          <div class="widget-bottom"><span>WORD HOUR</span><span>↗</span></div>
+        </div>
+        <div class="notice-card">
+          <strong>Важно: это настоящий виджет iPhone через Scriptable</strong>
+          <p>Сам сайт нельзя добавить как нативный виджет iOS. Для виджета используется бесплатное приложение Scriptable. Оно читает экспортированный файл словаря из iCloud Drive.</p>
+        </div>
+        <ol class="steps">
+          <li><strong>Установи Scriptable</strong><span>Скачай Scriptable из App Store.</span></li>
+          <li><strong>Экспортируй словарь</strong><span>Нажми «Скачать файл для виджета» ниже. Сохрани <code>words.json</code> в iCloud Drive → Scriptable → WordHour.</span></li>
+          <li><strong>Создай скрипт</strong><span>В Scriptable создай новый Script, назови его <b>Word Hour</b>, открой файл <code>WordHour-Widget.js</code> из комплекта и скопируй его содержимое.</span></li>
+          <li><strong>Добавь виджет</strong><span>На главном экране iPhone удерживай пустое место → «+» → Scriptable → выбери размер виджета → добавь его → в настройках виджета выбери скрипт Word Hour.</span></li>
+        </ol>
+        <button id="widget-export-btn" class="primary-button full-button">Скачать файл для виджета ↓</button>
+        <p class="small-note">Виджет запрашивает обновление примерно раз в час, но фактическое время обновления контролирует iOS и оно может задерживаться. После изменения словаря экспортируй JSON ещё раз и замени старый файл в iCloud Drive.</p>
+        <div class="code-card">
+          <div class="code-card-head"><strong>Скрипт виджета</strong><button id="copy-widget-btn" class="text-button">Копировать код</button></div>
+          <pre id="widget-code-preview">Код Scriptable входит в комплект приложения (файл WordHour-Widget.js).</pre>
+        </div>
+      </section>
+
+      <section id="view-settings" class="view">
+        <div class="section-heading"><div><div class="eyebrow">ПЕРСОНАЛИЗАЦИЯ</div><h1>Настройки</h1></div></div>
+        <div class="settings-card">
+          <div class="setting-row"><div><strong>Смена слова каждый час</strong><span>По местному времени телефона</span></div><label class="switch"><input id="hourly-toggle" type="checkbox" checked><span></span></label></div>
+          <div class="setting-row"><div><strong>Язык перевода</strong><span>Основной язык словаря</span></div><select id="translation-language"><option value="ru">Русский</option><option value="uk">Українська</option></select></div>
+          <div class="setting-row"><div><strong>Сбросить цикл слов</strong><span>Начать новый порядок с первого часа</span></div><button id="reset-cycle-btn" class="outline-small">Сбросить</button></div>
+          <div class="setting-row"><div><strong>Экспорт словаря</strong><span>Сохранить слова и прогресс</span></div><button id="settings-export-btn" class="outline-small">Экспорт</button></div>
+          <div class="setting-row"><div><strong>Удалить словарь</strong><span>Удалить импортированные слова и прогресс</span></div><button id="clear-btn" class="danger-small">Удалить</button></div>
+        </div>
+        <div class="about-card"><strong>Word Hour</strong><p>Твоё слово. Каждый час. В твоём ритме.</p><span>Версия 1.0 · Работает локально на устройстве</span></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Основная навигация">
+      <button class="nav-item active" data-view="word"><span>◉</span><small>Слово</small></button>
+      <button class="nav-item" data-view="dictionary"><span>▤</span><small>Словарь</small></button>
+      <button class="nav-item" data-view="progress"><span>▥</span><small>Прогресс</small></button>
+      <button class="nav-item" data-view="widget"><span>▣</span><small>Виджет</small></button>
+      <button class="nav-item" data-view="settings"><span>⚙</span><small>Ещё</small></button>
+    </nav>
+  </div>
+
+  <input id="file-input" type="file" accept=".csv,.txt,.xlsx,.xls,.json" hidden>
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-panel">
+      <div class="modal-head"><div><div class="eyebrow">ИМПОРТ СЛОВ</div><h2>Загрузить словарь</h2></div><button id="modal-close" class="icon-button">×</button></div>
+      <p class="muted">Поддерживаются CSV, TXT, JSON и Excel. Для Excel нужен интернет при первом открытии импорта.</p>
+      <div class="drop-zone" id="drop-zone"><span class="upload-icon">↑</span><strong>Выбери файл со словами</strong><span>CSV · TXT · XLSX · JSON</span><button id="choose-file-btn" class="secondary-button">Выбрать файл</button></div>
+      <div id="import-preview" class="import-preview hidden"></div>
+      <div class="modal-actions"><button id="sample-download-btn" class="text-button">Скачать шаблон CSV</button><button id="confirm-import-btn" class="primary-button" disabled>Импортировать</button></div>
+    </div>
+  </div>
+  <div id="toast" class="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
